@@ -9,10 +9,18 @@ resource "aws_iam_openid_connect_provider" "github" {
   thumbprint_list = ["1b511abead59c6ce207077c0bf0e0043b1382612"]
 }
 
-# Create the registry for the test image
+# Create the registry for the transcoder image
 resource "aws_ecr_repository" "transcoding" {
   provider             = aws.north
   name                 = "${var.project_name}-transcoding"
+  image_tag_mutability = "MUTABLE"
+  force_delete         = true
+}
+
+# Create the registry for the uploader image
+resource "aws_ecr_repository" "uploader" {
+  provider             = aws.north
+  name                 = "${var.project_name}-uploader"
   image_tag_mutability = "MUTABLE"
   force_delete         = true
 }
@@ -34,6 +42,7 @@ data "aws_iam_policy_document" "ecr_assume_role" {
       variable = "token.actions.githubusercontent.com:sub"
       values   = [
         "repo:go-transcoder/transcoder:ref:refs/heads/main",
+        "repo:go-transcoder/uploader:ref:refs/heads/main",
       ]
     }
 
@@ -77,6 +86,7 @@ resource "aws_iam_policy" "access_registry_policy" {
         ],
         Resource : [
           aws_ecr_repository.transcoding.arn,
+          aws_ecr_repository.uploader.arn,
         ]
       },
       {

@@ -78,7 +78,7 @@ resource "null_resource" "function_binary" {
   }
 }
 
-# zip the binary, as we can upload only zip files to AWS lambda
+# zip the binary, as we can videos only zip files to AWS lambda
 data "archive_file" "s3_event_function_archive" {
   depends_on = [null_resource.function_binary]
 
