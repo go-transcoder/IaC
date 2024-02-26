@@ -1,16 +1,26 @@
+# Filter out local zones, which are not currently supported
+# with managed node groups
+data "aws_availability_zones" "available" {
+  filter {
+    name   = "opt-in-status"
+    values = ["opt-in-not-required"]
+  }
+}
+
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 4.0"
+  version = "~> 5.5.0"
 
   name = var.project_name
-  cidr = "10.99.0.0/18"
+  cidr = var.vpc_cidr
+  azs  = slice(data.aws_availability_zones.available.names, 0, 3)
 
-  azs             = ["${var.region}a", "${var.region}b", "${var.region}c"]
-  public_subnets  = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
-  private_subnets = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
+  private_subnets = var.vpc_private_subnets
+  public_subnets  = var.vpc_public_subnets
 
   enable_nat_gateway = true
   single_nat_gateway = true
+  enable_dns_hostnames     = true
 
   public_route_table_tags  = { Name = "${var.project_name}-public" }
   public_subnet_tags       = { Name = "${var.project_name}-public" }
@@ -18,7 +28,6 @@ module "vpc" {
   private_subnet_tags      = { Name = "${var.project_name}-private" }
 
   enable_dhcp_options      = true
-  enable_dns_hostnames     = true
   dhcp_options_domain_name = "ec2.internal"
 }
 
