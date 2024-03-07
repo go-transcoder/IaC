@@ -16,6 +16,11 @@ variable "registries_prefix" {
   default     = null
 }
 
+variable "github_oidc_url" {
+  description = "The url of the oidc for github, we use this variable to check if the oidc is created. if not we creat otherwise we use the existing one"
+  type        = string
+}
+
 variable "registries_names" {
   description = "List of the registries names to be created"
   type        = list(string)

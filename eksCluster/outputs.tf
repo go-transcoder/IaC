@@ -19,3 +19,7 @@ output "cluster_name" {
 output "iam_eks_role_arn" {
   value = module.iam_eks_role.iam_role_arn
 }
+
+output "node_security_group_id" {
+  value = module.eks.node_security_group_id
+}

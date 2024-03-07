@@ -1,4 +1,4 @@
-module namir/s3-event-handler
+	module namir/s3-event-handler
 
 go 1.21.5
 
