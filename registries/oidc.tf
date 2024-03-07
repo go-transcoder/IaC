@@ -1,7 +1,13 @@
 
 # OIDC
+data "aws_iam_openid_connect_provider" "existing" {
+  url = var.github_oidc_url
+}
+
 resource "aws_iam_openid_connect_provider" "github" {
-  url = "https://token.actions.githubusercontent.com"
+  count = length(data.aws_iam_openid_connect_provider.existing.url) == 0 ? 1 : 0
+
+  url = var.github_oidc_url
 
   client_id_list = [
     "sts.amazonaws.com",

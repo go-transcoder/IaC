@@ -10,24 +10,24 @@ variable "vpc_subnets" {
 
 variable "node_groups" {
   description = "Map of attribute maps for all EKS managed node groups created"
-  type = any
+  type        = any
 }
 
 variable "oidc_fully_qualified_subjects" {
-  type = list(string)
+  type        = list(string)
   description = "Specifies which Kubernetes service accounts are allowed to assume the IAM role via OIDC authentication"
-  default = [
+  default     = [
     "system:serviceaccount:default:transcoder-app"
   ]
 }
 
 variable "service_account" {
   description = "The service account that is gonna be used with the pods for the uploader app"
-  type = string
-  default = "transcoder-app"
+  type        = string
+  default     = "transcoder-app"
 }
 
 variable "region" {
   description = "region in which we are hosting eks"
-  type = string
+  type        = string
 }

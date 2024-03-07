@@ -1,4 +1,10 @@
 terraform {
+  backend "s3" {
+    bucket         = "abboud131231231231namir-my-transcoding-tf-state-bucket"
+    key            = "terraform.tfstate"
+    region         = "us-east-1"
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -17,13 +23,11 @@ terraform {
 
 provider "aws" {
   region  = var.region
-  profile = var.profile
 }
 
 provider "aws" {
   alias   = "north"
   region  = "eu-north-1"
-  profile = var.profile
 }
 
 // use the registries module to create our modules
@@ -33,6 +37,8 @@ module "registries" {
   aws_region        = "eu-north-1"
   aws_profile       = var.profile
   registries_prefix = var.project_name
+
+  github_oidc_url = "https://token.actions.githubusercontent.com"
 
   transcoder_registry_name = "transcoder"
   uploader_registry_name   = "uploader"
