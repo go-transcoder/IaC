@@ -27,7 +27,7 @@ jobs:
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
 
       - name: Terraform Plan
-        uses: ./.github/apply
+        uses: ./.github/plan
         with:
           terraform_directory: "."
           terraform_version: ${{ env.TERRAFORM_VERSION }}
