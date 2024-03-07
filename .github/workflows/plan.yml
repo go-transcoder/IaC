@@ -21,7 +21,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4 # More information on this action can be found below in the 'AWS Credentials' section
         with:
           role-to-assume: ${{ secrets.ROLE_ARN }}
-          aws-region: ${{ secrets.REGION }}
+          aws-region: eu-north-1
 
       - name: Get PR ID
         id: pr-id
