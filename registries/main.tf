@@ -1,7 +1,7 @@
 provider "aws" {
   # This provider configuration will use the provider passed from the parent module
   region = var.aws_region
-  profile = coalesce(var.aws_profile, "default")
+#  profile = coalesce(var.aws_profile, "default")
 }
 
 resource "aws_ecr_repository" "repositories" {
