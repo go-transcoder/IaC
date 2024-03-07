@@ -34,6 +34,7 @@ jobs:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           github_token: ${{ secrets.TOKEN }}
           pr_id: ${{ steps.pr-id.outputs.PR_NUMBER }}
+          old_pr_id: ${{ github.event.pull_request.number }}
           role_arn: ${{ secrets.ROLE_ARN }}
           aws_region: ${{ secrets.REGION }}
 
