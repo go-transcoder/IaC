@@ -54,7 +54,7 @@ runs:
         github_token: ${{ inputs.github_token }}
         workflow: plan.yaml
         pr: ${{ inputs.old_pr_id }}
-        name: ${{ inputs.old_pr_id }}-tf-plan
+#        name: ${{ inputs.old_pr_id }}-tf-plan
         path: ${{ inputs.terraform_directory }}
 
     - name: Terraform Apply
