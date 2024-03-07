@@ -18,8 +18,12 @@ inputs:
     description: 'GitHub token for auth'
     required: true
   pr_id:
+    description: 'Branch ref' # see https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
+    required: true
+  old_pr_id:
     description: 'Pull request ID'
     required: true
+
 
 runs:
   using: "composite"
@@ -49,8 +53,8 @@ runs:
       with:
         github_token: ${{ inputs.github_token }}
         workflow: plan.yaml
-        pr: ${{ inputs.pr_id }}
-        name: ${{ inputs.pr_id }}-tf-plan
+        pr: ${{ inputs.old_pr_id }}
+        name: ${{ inputs.old_pr_id }}-tf-plan
         path: ${{ inputs.terraform_directory }}
 
     - name: Terraform Apply
@@ -62,15 +66,15 @@ runs:
         terraform apply -input=false -no-color tfplan >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
 
-    - name: Comment Apply
-      id: comment-apply
-      uses: peter-evans/create-or-update-comment@v2
-      with:
-        token: ${{ inputs.github_token }}
-        issue-number: ${{ inputs.pr_id }}
-        body: |
-          Terraform Apply:
-
-          ```
-          ${{ steps.apply.outputs.apply }}
-          ```
+#    - name: Comment Apply
+#      id: comment-apply
+#      uses: peter-evans/create-or-update-comment@v2
+#      with:
+#        token: ${{ inputs.github_token }}
+#        issue-number: ${{ inputs.pr_id }}
+#        body: |
+#          Terraform Apply:
+#
+#          ```
+#          ${{ steps.apply.outputs.apply }}
+#          ```
