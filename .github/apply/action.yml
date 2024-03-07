@@ -2,14 +2,20 @@ name: "Terraform setup and apply"
 description: "Applys a terraform plan file from an artifact"
 inputs:
   terraform_directory:
-    description: 'where to execute terraform'
+    description: 'Directory that holds Terraform code'
+    required: true
+  role_arn:
+    description: 'AWS IAM role used for Terraform actions'
+    required: true
+  aws_region:
+    description: 'AWS region used with the authentication of the user'
     required: true
   terraform_version:
     description: 'Terraform Version'
     required: true
     default: 1.7.4
   github_token:
-    description: 'github secret'
+    description: 'GitHub token for auth'
     required: true
   pr_id:
     description: 'Pull request ID'
