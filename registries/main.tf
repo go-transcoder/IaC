@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "this" {
     effect = "Allow"
 
     principals {
-      identifiers = [aws_iam_openid_connect_provider.github.arn]
+      identifiers = [data.aws_iam_openid_connect_provider.existing.arn]
       type        = "Federated"
     }
 
