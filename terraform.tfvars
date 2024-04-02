@@ -1,1 +1,0 @@
-terraform_state_bucket = "abboud131231231231namir-my-transcoding-tf-state-bucket"

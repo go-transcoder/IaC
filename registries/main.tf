@@ -4,8 +4,9 @@ provider "aws" {
 #  profile = coalesce(var.aws_profile, "default")
 }
 
+# TODO: the following should be dynamic
 resource "aws_ecr_repository" "repositories" {
-  for_each = toset(concat([var.transcoder_registry_name], [var.uploader_registry_name]))
+  for_each = toset(var.registries_names)
 
   name = "${var.registries_prefix}_${each.key}"
 
@@ -13,14 +14,12 @@ resource "aws_ecr_repository" "repositories" {
   force_delete         = true
 }
 
-data "aws_ecr_repository" "transcoder_repo" {
-  depends_on = [aws_ecr_repository.repositories]
-  name = "${var.registries_prefix}_${var.transcoder_registry_name}"
-}
+data "aws_ecr_repository" "repositories" {
+  for_each = toset(var.registries_names)
 
-data "aws_ecr_repository" "uploader_repo" {
+  name = "${var.registries_prefix}_${each.key}"
+
   depends_on = [aws_ecr_repository.repositories]
-  name = "${var.registries_prefix}_${var.uploader_registry_name}"
 }
 
 # Assumed role for the ecr role
