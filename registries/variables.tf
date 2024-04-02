@@ -27,18 +27,6 @@ variable "registries_names" {
   default     = []
 }
 
-variable "transcoder_registry_name" {
-  description = "The name of the transcoding registry"
-  type        = string
-  default     = null
-}
-
-variable "uploader_registry_name" {
-  description = "The name of the uploader registry"
-  type        = string
-  default     = null
-}
-
 variable "registries_allowed_repos" {
   description = "List of the repositories that has access to the registries"
   type        = list(string)

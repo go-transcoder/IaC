@@ -6,6 +6,10 @@ variable "project_name" {
   default = "my-transcoding-example"
 }
 
+variable "env" {
+  default = "dev"
+}
+
 variable "terraform_state_bucket" {
   description = "The bucket where we store the state file"
   type        = string
