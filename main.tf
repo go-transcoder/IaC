@@ -57,15 +57,15 @@ module "ecs" {
       env : [
         {
           name : "DB_NAME"
-          value : "main_db"
+          value : var.db_config.db_name
         },
         {
           name : "DB_USER"
-          value : "main_user"
+          value : var.db_config.db_user
         },
         {
           name : "DB_PASSWORD"
-          value : "!@2$da2YvvDgeg1"
+          value : var.db_config.db_password
         },
         {
           name : "DB_HOST"
@@ -73,7 +73,7 @@ module "ecs" {
         },
         {
           name : "DB_PORT"
-          value : "5432"
+          value : var.db_config.db_port
         }
       ]
     }
