@@ -1,10 +1,9 @@
 provider "aws" {
   # This provider configuration will use the provider passed from the parent module
   region = var.aws_region
-#  profile = coalesce(var.aws_profile, "default")
+  #  profile = coalesce(var.aws_profile, "default")
 }
 
-# TODO: the following should be dynamic
 resource "aws_ecr_repository" "repositories" {
   for_each = toset(var.registries_names)
 
@@ -28,7 +27,9 @@ data "aws_iam_policy_document" "this" {
     effect = "Allow"
 
     principals {
-      identifiers = [data.aws_iam_openid_connect_provider.existing.arn]
+      identifiers = [
+        length(data.aws_iam_openid_connect_provider.existing.arn) == 0 ? aws_iam_openid_connect_provider.github[0].arn : data.aws_iam_openid_connect_provider.existing.arn
+      ]
       type        = "Federated"
     }
 
@@ -82,7 +83,14 @@ resource "aws_iam_policy" "this" {
       {
         "Effect" : "Allow",
         "Action" : [
-          "ecr:GetAuthorizationToken"
+          "ecr:GetAuthorizationToken",
+          "ecs:RunTask",
+          "iam:PassRole",
+          "ecs:DescribeTaskDefinition",
+          "ecs:RegisterTaskDefinition",
+          "ecs:DescribeServices",
+          "ecs:UpdateService",
+          "secretsmanager:GetSecretValue"
         ],
         "Resource" : "*"
       }

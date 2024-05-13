@@ -30,7 +30,7 @@ resource "aws_lambda_function" "s3_event_trigger" {
 
   source_code_hash = data.archive_file.s3_event_function_archive.output_base64sha256
 
-  runtime = "go1.x"
+  runtime = "provided.al2"
 
   #  environment {
   #    variables = {

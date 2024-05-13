@@ -69,12 +69,16 @@ resource "aws_batch_job_queue" "transcode" {
   state                 = "ENABLED"
 }
 
+
 resource "aws_batch_job_definition" "transcode_job_definition" {
+
+  for_each = var.job_definitions
+
   name                 = "video-transcode-job-definition"
   type                 = "container"
   container_properties = jsonencode({
     command              = [],
-    image                = "${var.docker_image_registry_url}:${var.docker_image_tag}"
+    image                = each.value.image
     resourceRequirements = [
       {
         type  = "VCPU"
@@ -94,35 +98,15 @@ resource "aws_batch_job_definition" "transcode_job_definition" {
         awslogs-stream-prefix = var.project_name
       }
     }
-    volumes = [
-      {
-        host = {
-          sourcePath = "/tmp"
-        }
-        name = "tmp"
-      }
-    ]
+    volumes = try(each.value.volume, [])
 
-    environment = [
-      {
-        name  = "INPUT_S3_BUCKET"
-        value = var.s3_bucket
-      },
-      {
-        name  = "AWS_REGION"
-        value = "us-east-1"
-      },
-      {
-        name  = "UPLOADER_APP_UPLOAD_PATH"
-        value = "/tmp"
-      }
-    ]
+    environment = try(each.value.environment, [])
 
     executionRoleArn = aws_iam_role.ecs_task_execution_role.arn
   })
 
   timeout {
-    attempt_duration_seconds = 60
+    attempt_duration_seconds = 500
   }
 
   retry_strategy {
@@ -136,6 +120,7 @@ resource "aws_batch_job_definition" "transcode_job_definition" {
       on_exit_code = 0
     }
   }
+
   tags = {
     JobDefinition = "video-transcode-job-definition"
   }

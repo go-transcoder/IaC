@@ -16,6 +16,14 @@ terraform {
     null = {
       source = "hashicorp/null"
     }
+    postgresql = {
+      source = "cyrilgdn/postgresql"
+      version = "1.22.0"
+    }
+    external = {
+      source = "hashicorp/external"
+      version = "2.3.3"
+    }
   }
 
   required_version = ">= 1.2.0"

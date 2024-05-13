@@ -3,7 +3,7 @@
 // ##############################
 
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name               = "ecsTaskExecutionRole"
+  name               = "BatchECSTaskExecutionRole"
   assume_role_policy = data.aws_iam_policy_document.batch_execution_role_assume_role_policy.json
 }
 

@@ -1,0 +1,39 @@
+name: Deploy with terraform apply
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  TERRAFORM_VERSION: 1.8.1
+  TERRAFORM_DIR: "."
+jobs:
+  terraform_apply:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      - name: Terraform Init
+        id: init
+        working-directory: ${{ env.TERRAFORM_DIR }}
+        shell: bash
+        run: |
+          terraform init
+
+      - name: Terraform Apply
+        id: apply
+        working-directory: ${{ env.TERRAFORM_DIR }}
+        shell: bash
+        run: |
+          terraform apply -input=false -no-color

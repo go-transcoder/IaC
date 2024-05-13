@@ -39,5 +39,5 @@ variable "lambda_policy_statements" {
 
 variable "lambda_role_name" {
   description = "The role that is consumed by the lambda, which let it access the bucket and trigger the batch"
-  default     = "LambdaCatchS3EventAndTriggerBatch"
+  default     = "ReadFromS3BatchStartJobLogs"
 }

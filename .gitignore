@@ -34,3 +34,5 @@ override.tf.json
 terraform.rc
 
 .idea
+
+tf_ansible_vars_file.yml

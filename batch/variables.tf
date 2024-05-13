@@ -41,4 +41,7 @@ variable "docker_image_tag" {
   default     = null
 }
 
-
+variable "job_definitions" {
+  description = "The job definition to be added"
+  type = map(any)
+}

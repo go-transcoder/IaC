@@ -26,7 +26,7 @@ module "vpc_endpoint_security_group" {
 
 
   egress_cidr_blocks = ["0.0.0.0/0"]
-  egress_rules       = ["https-443-tcp"]
+  egress_rules       = ["all-tcp"]
 }
 
 module "db_instance_security_group" {
@@ -86,3 +86,30 @@ module "ecs_task_security_group" {
     }
   ]
 }
+
+module "lb_security_group" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 5.0"
+
+  name        = "${var.project_name}-lb-sg"
+  description = "Security group for the load balancer"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      cidr_blocks = "0.0.0.0/0"
+    }
+  ]
+  egress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = "0.0.0.0/0"
+    }
+  ]
+}
+
