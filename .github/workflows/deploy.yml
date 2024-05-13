@@ -47,4 +47,4 @@ jobs:
         working-directory: ${{ env.TERRAFORM_DIR }}
         shell: bash
         run: |
-          terraform apply -input=false -no-color
+          terraform apply -auto-approve -input=false -no-color
