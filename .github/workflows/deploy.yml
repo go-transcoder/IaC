@@ -8,7 +8,9 @@ on:
 
 env:
   TERRAFORM_VERSION: 1.8.1
-  TERRAFORM_DIR: "."
+  TERRAFORM_DIR: .
+  AWS_REGION: us-east-1
+
 jobs:
   terraform_apply:
     runs-on: ubuntu-latest
