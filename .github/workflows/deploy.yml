@@ -10,6 +10,9 @@ env:
   TERRAFORM_VERSION: 1.8.1
   TERRAFORM_DIR: .
   AWS_REGION: us-east-1
+  TF_VAR_DB_CONFIG: ${{ secrets.TF_VAR_DB_CONFIG }}
+  TF_VAR_TERRAFORM_STATE_BUCKET: ${{ secrets.TF_VAR_TERRAFORM_STATE_BUCKET }}
+  TF_VAR_VAULT_PASS: ${{ secrets.TF_VAR_VAULT_PASS }}
 
 jobs:
   terraform_apply:
