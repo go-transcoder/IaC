@@ -48,3 +48,9 @@ jobs:
         shell: bash
         run: |
           terraform apply -auto-approve -input=false -no-color
+
+      - name: Upload the tf_ansible_vars_file.yml to artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tf_ansible_vars_file
+          path: ./tf_ansible_vars_file.yml
