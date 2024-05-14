@@ -306,6 +306,8 @@ resource "local_file" "tf_ansible_vars_file_new" {
     tf_publisher_load_balancer_target_group_arn: ${module.lb.upload_app_target_group_80}
     tf_publisher_execution_role_arn: ${module.ecs.task_execution_role}
     tf_publisher_task_role_arn: ${module.ecs.task_role}
+
+    tf_ecs_log_group: ${module.ecs.log_group}
     DOC
   filename = "./tf_ansible_vars_file.yml"
 }

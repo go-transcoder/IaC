@@ -11,6 +11,11 @@ resource "aws_key_pair" "main_deployer" {
   public_key = trimspace(tls_private_key.main_ec2_private[0].public_key_openssh)
 }
 
+resource "aws_iam_instance_profile" "this" {
+  name = "${var.project_name}_ec2_main_registry"
+  role = aws_iam_role.this.name
+}
+
 resource "aws_instance" "web" {
   ami                         = "ami-07caf09b362be10b8"
   instance_type               = "t2.micro"
@@ -18,6 +23,7 @@ resource "aws_instance" "web" {
   vpc_security_group_ids      = [module.jump_box_security_group.security_group_id]
   subnet_id                   = var.subnet_id
   associate_public_ip_address = true
+  iam_instance_profile        = aws_iam_instance_profile.this.name
 
 
   tags = {

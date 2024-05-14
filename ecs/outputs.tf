@@ -13,3 +13,7 @@ output "task_role" {
 output "cluster" {
   value = aws_ecs_cluster.this.name
 }
+
+output "log_group" {
+  value = aws_cloudwatch_log_group.this.name
+}
