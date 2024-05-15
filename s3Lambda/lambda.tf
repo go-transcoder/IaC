@@ -32,11 +32,11 @@ resource "aws_lambda_function" "s3_event_trigger" {
 
   runtime = "provided.al2"
 
-  #  environment {
-  #    variables = {
-  #      QUEUE_URL = aws_sqs_queue.source.url
-  #    }
-  #  }
+    environment {
+      variables = {
+        JOB_DEFINITION = var.batch_job_definition
+      }
+    }
 }
 
 # resource based policy

@@ -90,6 +90,7 @@ resource "aws_iam_policy" "this" {
           "ecs:RegisterTaskDefinition",
           "ecs:DescribeServices",
           "ecs:UpdateService",
+          "secretsmanager:ListSecrets",
           "secretsmanager:GetSecretValue"
         ],
         "Resource" : "*"

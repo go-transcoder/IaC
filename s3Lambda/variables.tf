@@ -41,3 +41,8 @@ variable "lambda_role_name" {
   description = "The role that is consumed by the lambda, which let it access the bucket and trigger the batch"
   default     = "ReadFromS3BatchStartJobLogs"
 }
+
+variable "batch_job_definition" {
+  description = "The Job definition of the batch job to be used with the lambda function triggered on s3 event"
+  type = string
+}

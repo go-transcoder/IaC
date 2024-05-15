@@ -22,26 +22,3 @@ variable "region" {
   type    = string
   default = null
 }
-
-variable "s3_bucket" {
-  description = "The S3 bucket to use in the batch module."
-  type        = string
-  default     = null
-}
-
-variable "docker_image_registry_url" {
-  description = "The job definition container image, that the compute environment will start"
-  type        = string
-  default     = null
-}
-
-variable "docker_image_tag" {
-  description = "The job definition container image tag"
-  type        = string
-  default     = null
-}
-
-variable "job_definitions" {
-  description = "The job definition to be added"
-  type = map(any)
-}

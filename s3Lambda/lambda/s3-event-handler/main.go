@@ -5,6 +5,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/batch/types"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -20,7 +21,7 @@ func handler(ctx context.Context, s3Event events.S3Event) error {
 		return err
 	}
 
-	jobDefinition := "video-transcode-job-definition"
+	jobDefinition := os.Getenv("JOB_DEFINITION")
 	jobName := "transcode-job"
 	jobQueue := "HighPriorityTranscodeQueue"
 

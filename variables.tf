@@ -61,3 +61,9 @@ variable "db_config" {
 variable "vault_pass" {
   type = string
 }
+
+variable "batch_config" {
+  type = object({
+    transcode_task_definition_name: string
+  })
+}
