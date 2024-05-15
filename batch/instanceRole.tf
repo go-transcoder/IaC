@@ -45,6 +45,7 @@ resource "aws_iam_policy" "s3_role_permissions" {
           "s3:GetObject",
           "s3:HeadObject",
           "s3:PutObject",
+          "s3:DeleteObject"
         ],
         Resource = "arn:aws:s3:::*/*",
       }
