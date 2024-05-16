@@ -1,7 +1,8 @@
 # IaC
 aws infrastructure as code
 
-### Steps
+
+### Steps !! outdated documentation
 1. Provision  
    `terraform apply`
 
