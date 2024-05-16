@@ -93,77 +93,6 @@ module "ecs" {
   env          = var.env
   project_name = var.project_name
   region       = var.region
-
-  task_definitions = {
-    "uploader" = {
-      family : "${var.project_name}-uploader"
-      image : module.registries.repository_urls["uploader"],
-      repository_name : module.registries.repository_names["uploader"]
-
-      # Later the uploaded project will update the task definition.
-      env : [
-        {
-          name : "DBNAME"
-          value : var.db_config.uploader.name
-        },
-        {
-          name : "DBUSER"
-          value : var.db_config.uploader.user
-        },
-        {
-          name : "DBPASS"
-          value : var.db_config.uploader.password
-        },
-        {
-          name : "DBHOST"
-          value : module.db_aurora[0].host_url
-        },
-        {
-          name : "DBPORT"
-          value : var.db_config.db_port
-        },
-        {
-          name : "INPUT_S3_BUCKET"
-          value : module.s3_lambda.s3_bucket
-        },
-        {
-          name : "PORT"
-          value : 4000
-        },
-        {
-          name : "KAFKAHOST"
-          value : join(",", module.msk.bootstrap_brokers)
-        },
-        {
-          name : "KAFKATOPIC"
-          value : "video-transcode-status"
-        }
-      ]
-      portMapping = [
-        {
-          containerPort = 4000
-          hostPort      = 4000
-        }
-      ]
-    }
-  }
-
-  services = {
-    "uploader-app" : {
-      task_definition : "uploader"
-      desired_count : 1
-      deployment_maximum_percent : 100
-      deployment_minimum_healthy_percent : 0
-      subnets_list : module.vpc.private_subnets
-      security_group : module.vpc.ecs_security_group_id
-      load_balancer : [
-        {
-          target_group_arn : module.lb.upload_app_target_group_80
-          container_port : 4000
-        }
-      ]
-    }
-  }
 }
 
 module "s3_lambda" {
@@ -192,24 +121,24 @@ module "lb" {
   security_group_id = module.vpc.lb_security_group
 }
 
-module "msk" {
-  source = "./msk"
-
-  env          = var.env
-  project_name = var.project_name
-
-  vpc_id  = module.vpc.vpc_id
-  subnets = [module.vpc.private_subnets[0], module.vpc.private_subnets[1]]
-
-  security_group_rules = {
-    vpc_ingress = {
-      cidr_blocks = module.vpc.private_subnets_cidr_blocks
-    }
-    bastion = {
-      source_security_group_id = module.jump_box.security_group_id
-    }
-  }
-}
+#module "msk" {
+#  source = "./msk"
+#
+#  env          = var.env
+#  project_name = var.project_name
+#
+#  vpc_id  = module.vpc.vpc_id
+#  subnets = [module.vpc.private_subnets[0], module.vpc.private_subnets[1]]
+#
+#  security_group_rules = {
+#    vpc_ingress = {
+#      cidr_blocks = module.vpc.private_subnets_cidr_blocks
+#    }
+#    bastion = {
+#      source_security_group_id = module.jump_box.security_group_id
+#    }
+#  }
+#}
 
 module "secrets" {
   source = "./secrets"
@@ -223,11 +152,12 @@ module "secrets" {
     MAIN_DB_PASS : var.db_config.db_password
     UPLOADER_DB_PASS : var.db_config.uploader.password
     TRANSCODER_DB_PASS : var.db_config.transcoder.password
-    KAFKA_BOOTSTRAP_STRING : join(",", module.msk.bootstrap_brokers)
   }
 }
 
 # output variables for the ansible project
+# tf_kafka_brokers_urls: ${join(",", module.msk.bootstrap_brokers)}
+
 resource "local_file" "tf_ansible_vars_file_new" {
   content  = <<-DOC
     # Ansible vars_file containing variable values from Terraform.
@@ -243,8 +173,9 @@ resource "local_file" "tf_ansible_vars_file_new" {
     tf_aurora_db_host: ${module.db_aurora[0].host_url}
     tf_input_s3_bucket: ${module.s3_lambda.s3_bucket}
 
-    tf_kafka_brokers_urls: ${join(",", module.msk.bootstrap_brokers)}
     tf_ecs_cluster: ${module.ecs.cluster}
+
+    tf_kafka_brokers_urls: ""
 
     tf_publisher_load_balancer_target_group_arn: ${module.lb.upload_app_target_group_80}
     tf_publisher_execution_role_arn: ${module.ecs.task_execution_role}

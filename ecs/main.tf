@@ -8,3 +8,8 @@ resource "aws_ecs_cluster" "this" {
 
   tags = local.tags
 }
+
+resource "aws_cloudwatch_log_group" "this" {
+  name              = "${var.project_name}-ecs"
+  retention_in_days = 1
+}
